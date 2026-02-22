@@ -1,0 +1,129 @@
+# -*- mode: python ; coding: utf-8 -*-
+"""
+PyInstaller spec file for Telegram Mailer MacOS App
+Supports Universal Binary (Intel + Apple Silicon)
+"""
+
+import sys
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+
+block_cipher = None
+
+# Collect all necessary data files and hidden imports
+datas = []
+datas += collect_data_files('telethon')
+datas += collect_data_files('PyQt6')
+# Explicitly add ui module files
+datas += [('ui/auth_dialog.py', 'ui')]
+
+# Add qt.conf to fix Qt plugin loading on macOS
+import os
+qt_conf_content = """[Paths]
+Prefix = .
+Binaries = .
+"""
+qt_conf_path = os.path.join(os.getcwd(), 'qt.conf')
+with open(qt_conf_path, 'w') as f:
+    f.write(qt_conf_content)
+datas += [(qt_conf_path, '.')]
+
+# Hidden imports that PyInstaller might miss
+hiddenimports = []
+hiddenimports += collect_submodules('telethon')
+hiddenimports += collect_submodules('PyQt6')
+hiddenimports += collect_submodules('ui')  # Add all ui modules
+hiddenimports += [
+    'keyring.backends.macOS',
+    'keyring.backends.OS_X',
+    'asyncio',
+    'sqlite3',
+    'cryptography',
+    'rsa',
+    'pyaes',
+    'ui.auth_dialog',  # Explicitly add auth_dialog
+    'ui.main_window',
+    'ui.text_editor_panel',
+    'ui.progress_panel',
+]
+
+a = Analysis(
+    ['main.py'],
+    pathex=[],
+    binaries=[],
+    datas=datas,
+    hiddenimports=hiddenimports,
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=['hook-PyQt6.py'],
+    excludes=[
+        'matplotlib',
+        'numpy',
+        'pandas',
+        'scipy',
+        'PIL',
+        'tkinter',  # Exclude tkinter as we use PyQt6
+    ],
+    win_no_prefer_redirects=False,
+    win_private_assemblies=False,
+    cipher=block_cipher,
+    noarchive=False,
+)
+
+pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    [],
+    exclude_binaries=True,
+    name='TelegramMailer',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=True,
+    console=False,  # No console window on MacOS
+    disable_windowed_traceback=False,
+    argv_emulation=True,  # Enable for macOS
+    target_arch=None,  # Build for current architecture only
+    codesign_identity=None,
+    entitlements_file=None,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    upx_exclude=[],
+    name='TelegramMailer',
+)
+
+app = BUNDLE(
+    coll,
+    name='TelegramMailer.app',
+    icon=None,
+    bundle_identifier='com.telegrammailer.app',
+    version='1.0.0',
+    info_plist={
+        'NSPrincipalClass': 'NSApplication',
+        'NSHighResolutionCapable': 'True',
+        'LSMinimumSystemVersion': '10.13.0',
+        'NSRequiresAquaSystemAppearance': 'False',
+        'CFBundleName': 'Telegram Mailer',
+        'CFBundleDisplayName': 'Telegram Mailer',
+        'CFBundleGetInfoString': 'Telegram Mailer - Mass messaging application',
+        'CFBundleIdentifier': 'com.telegrammailer.app',
+        'CFBundleVersion': '1.0.0',
+        'CFBundleShortVersionString': '1.0.0',
+        'NSHumanReadableCopyright': 'Copyright © 2024',
+        # Permissions
+        'NSAppleEventsUsageDescription': 'This app needs to send Apple Events to prevent sleep during mailing.',
+        'NSSystemAdministrationUsageDescription': 'This app needs system administration access to prevent sleep.',
+        # Network access
+        'NSAppTransportSecurity': {
+            'NSAllowsArbitraryLoads': True,
+        },
+    },
+)

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Application Identity -->
+    <key>CFBundleIdentifier</key>
+    <string>com.telegrammailer.app</string>
+    
+    <key>CFBundleName</key>
+    <string>Telegram Mailer</string>
+    
+    <key>CFBundleDisplayName</key>
+    <string>Telegram Mailer</string>
+    
+    <key>CFBundleExecutable</key>
+    <string>TelegramMailer</string>
+    
+    <key>CFBundleIconFile</key>
+    <string>icon.icns</string>
+    
+    <!-- Version Information -->
+    <key>CFBundleVersion</key>
+    <string>1.0.0</string>
+    
+    <key>CFBundleShortVersionString</key>
+    <string>1.0.0</string>
+    
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    
+    <!-- Application Type -->
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    
+    <key>CFBundleSignature</key>
+    <string>????</string>
+    
+    <!-- UI Configuration -->
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    
+    <key>NSRequiresAquaSystemAppearance</key>
+    <false/>
+    
+    <key>LSMinimumSystemVersion</key>
+    <string>10.13.0</string>
+    
+    <!-- Copyright -->
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright © 2024. All rights reserved.</string>
+    
+    <key>CFBundleGetInfoString</key>
+    <string>Telegram Mailer - Mass messaging application for MacOS</string>
+    
+    <!-- Permissions and Usage Descriptions -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>This app needs to send Apple Events to prevent sleep during mailing operations.</string>
+    
+    <key>NSSystemAdministrationUsageDescription</key>
+    <string>This app needs system administration access to prevent sleep mode during long-running mailing operations.</string>
+    
+    <!-- Network Security -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    
+    <!-- Document Types (optional) -->
+    <key>CFBundleDocumentTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Text File</string>
+            <key>CFBundleTypeRole</key>
+            <string>Viewer</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>public.plain-text</string>
+            </array>
+        </dict>
+    </array>
+    
+    <!-- Supported Architectures -->
+    <key>LSArchitecturePriority</key>
+    <array>
+        <string>arm64</string>
+        <string>x86_64</string>
+    </array>
+</dict>
+</plist>
